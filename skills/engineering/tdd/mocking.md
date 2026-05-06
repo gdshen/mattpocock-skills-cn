@@ -1,59 +1,59 @@
-# When to Mock
+# 何时 Mock
 
-Mock at **system boundaries** only:
+只在 **system boundaries** mock：
 
-- External APIs (payment, email, etc.)
-- Databases (sometimes - prefer test DB)
+- External APIs（payment、email 等）
+- Databases（有时；优先 test DB）
 - Time/randomness
-- File system (sometimes)
+- File system（有时）
 
-Don't mock:
+不要 mock：
 
-- Your own classes/modules
+- 你自己的 classes/modules
 - Internal collaborators
-- Anything you control
+- 任何你控制的东西
 
-## Designing for Mockability
+## 为 Mockability 设计
 
-At system boundaries, design interfaces that are easy to mock:
+在 system boundaries，设计易于 mock 的 interfaces：
 
-**1. Use dependency injection**
+**1. 使用 dependency injection**
 
-Pass external dependencies in rather than creating them internally:
+传入 external dependencies，而不是在内部创建：
 
 ```typescript
-// Easy to mock
+// 容易 mock
 function processPayment(order, paymentClient) {
   return paymentClient.charge(order.total);
 }
 
-// Hard to mock
+// 难 mock
 function processPayment(order) {
   const client = new StripeClient(process.env.STRIPE_KEY);
   return client.charge(order.total);
 }
 ```
 
-**2. Prefer SDK-style interfaces over generic fetchers**
+**2. 优先使用 SDK-style interfaces，而不是 generic fetchers**
 
-Create specific functions for each external operation instead of one generic function with conditional logic:
+为每个 external operation 创建 specific functions，而不是一个带 conditional logic 的 generic function：
 
 ```typescript
-// GOOD: Each function is independently mockable
+// 好：每个 function 都能独立 mock
 const api = {
   getUser: (id) => fetch(`/users/${id}`),
   getOrders: (userId) => fetch(`/users/${userId}/orders`),
   createOrder: (data) => fetch('/orders', { method: 'POST', body: data }),
 };
 
-// BAD: Mocking requires conditional logic inside the mock
+// 坏：mocking 需要在 mock 内部写 conditional logic
 const api = {
   fetch: (endpoint, options) => fetch(endpoint, options),
 };
 ```
 
-The SDK approach means:
-- Each mock returns one specific shape
-- No conditional logic in test setup
-- Easier to see which endpoints a test exercises
-- Type safety per endpoint
+SDK 方式意味着：
+- 每个 mock 返回一个 specific shape
+- test setup 中没有 conditional logic
+- 更容易看出某个测试覆盖哪些 endpoints
+- 每个 endpoint 都有 type safety

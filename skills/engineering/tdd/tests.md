@@ -1,11 +1,11 @@
-# Good and Bad Tests
+# 好测试与坏测试
 
-## Good Tests
+## 好测试
 
-**Integration-style**: Test through real interfaces, not mocks of internal parts.
+**Integration-style**：通过真实 interfaces 测试，而不是 mock 内部 parts。
 
 ```typescript
-// GOOD: Tests observable behavior
+// 好：测试可观察 behavior
 test("user can checkout with valid cart", async () => {
   const cart = createCart();
   cart.add(product);
@@ -14,20 +14,20 @@ test("user can checkout with valid cart", async () => {
 });
 ```
 
-Characteristics:
+特征：
 
-- Tests behavior users/callers care about
-- Uses public API only
-- Survives internal refactors
-- Describes WHAT, not HOW
-- One logical assertion per test
+- 测试 users/callers 关心的 behavior
+- 只使用 public API
+- 能扛住 internal refactors
+- 描述 WHAT，而不是 HOW
+- 每个测试只有一个逻辑断言
 
-## Bad Tests
+## 坏测试
 
-**Implementation-detail tests**: Coupled to internal structure.
+**Implementation-detail tests**：和 internal structure 耦合。
 
 ```typescript
-// BAD: Tests implementation details
+// 坏：测试 implementation details
 test("checkout calls paymentService.process", async () => {
   const mockPayment = jest.mock(paymentService);
   await checkout(cart, payment);
@@ -35,24 +35,24 @@ test("checkout calls paymentService.process", async () => {
 });
 ```
 
-Red flags:
+危险信号：
 
-- Mocking internal collaborators
-- Testing private methods
-- Asserting on call counts/order
-- Test breaks when refactoring without behavior change
-- Test name describes HOW not WHAT
-- Verifying through external means instead of interface
+- Mock internal collaborators
+- 测试 private methods
+- 断言 call counts/order
+- behavior 未变时 refactoring 导致测试失败
+- test name 描述 HOW 而不是 WHAT
+- 通过 interface 以外的外部手段验证
 
 ```typescript
-// BAD: Bypasses interface to verify
+// 坏：绕过 interface 验证
 test("createUser saves to database", async () => {
   await createUser({ name: "Alice" });
   const row = await db.query("SELECT * FROM users WHERE name = ?", ["Alice"]);
   expect(row).toBeDefined();
 });
 
-// GOOD: Verifies through interface
+// 好：通过 interface 验证
 test("createUser makes user retrievable", async () => {
   const user = await createUser({ name: "Alice" });
   const retrieved = await getUser(user.id);

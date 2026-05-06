@@ -1,44 +1,44 @@
-# Interface Design
+# Interface 设计
 
-When the user wants to explore alternative interfaces for a chosen deepening candidate, use this parallel sub-agent pattern. Based on "Design It Twice" (Ousterhout) — your first idea is unlikely to be the best.
+用户想为已选的 deepening 候选项探索替代 interfaces 时，使用这个并行 sub-agent 模式。基于 "Design It Twice"（Ousterhout）：第一个想法通常不是最好的。
 
-Uses the vocabulary in [LANGUAGE.md](LANGUAGE.md) — **module**, **interface**, **seam**, **adapter**, **leverage**.
+使用 [LANGUAGE.md](LANGUAGE.md) 中的词汇：**module**、**interface**、**seam**、**adapter**、**leverage**。
 
-## Process
+## 流程
 
-### 1. Frame the problem space
+### 1. 界定问题空间
 
-Before spawning sub-agents, write a user-facing explanation of the problem space for the chosen candidate:
+启动 sub-agents 前，先为已选候选项写一段面向用户的问题空间说明：
 
-- The constraints any new interface would need to satisfy
-- The dependencies it would rely on, and which category they fall into (see [DEEPENING.md](DEEPENING.md))
-- A rough illustrative code sketch to ground the constraints — not a proposal, just a way to make the constraints concrete
+- 任何新 interface 必须满足的约束
+- 它依赖哪些东西，这些依赖属于哪个类别（见 [DEEPENING.md](DEEPENING.md)）
+- 一个粗略的示意代码草图，用来让约束落地；这不是提案，只是让约束具体化
 
-Show this to the user, then immediately proceed to Step 2. The user reads and thinks while the sub-agents work in parallel.
+把这段给用户看，然后立刻进入第 2 步。用户阅读和思考时，sub-agents 并行工作。
 
-### 2. Spawn sub-agents
+### 2. 启动 sub-agents
 
-Spawn 3+ sub-agents in parallel using the Agent tool. Each must produce a **radically different** interface for the deepened module.
+用 Agent 工具并行启动 3 个以上 sub-agents。每个都必须为 deepened module 产出一个**根本不同**的 interface。
 
-Prompt each sub-agent with a separate technical brief (file paths, coupling details, dependency category from [DEEPENING.md](DEEPENING.md), what sits behind the seam). The brief is independent of the user-facing problem-space explanation in Step 1. Give each agent a different design constraint:
+给每个 sub-agent 单独的技术 brief（文件路径、耦合细节、来自 [DEEPENING.md](DEEPENING.md) 的依赖类别、seam 后面有什么）。brief 独立于第 1 步面向用户的问题空间说明。给每个 agent 不同设计约束：
 
-- Agent 1: "Minimize the interface — aim for 1–3 entry points max. Maximise leverage per entry point."
-- Agent 2: "Maximise flexibility — support many use cases and extension."
-- Agent 3: "Optimise for the most common caller — make the default case trivial."
-- Agent 4 (if applicable): "Design around ports & adapters for cross-seam dependencies."
+- Agent 1："最小化 interface；目标最多 1-3 个入口点。最大化每个入口点的 leverage。"
+- Agent 2："最大化灵活性；支持多种用例和扩展。"
+- Agent 3："针对最常见调用者优化；让默认场景极其简单。"
+- Agent 4（如适用）："围绕 ports & adapters 设计跨 seam 依赖。"
 
-Include both [LANGUAGE.md](LANGUAGE.md) vocabulary and CONTEXT.md vocabulary in the brief so each sub-agent names things consistently with the architecture language and the project's domain language.
+brief 中同时包含 [LANGUAGE.md](LANGUAGE.md) 词汇和 CONTEXT.md 词汇，让每个 sub-agent 按架构语言和项目领域语言一致命名。
 
-Each sub-agent outputs:
+每个 sub-agent 输出：
 
-1. Interface (types, methods, params — plus invariants, ordering, error modes)
-2. Usage example showing how callers use it
-3. What the implementation hides behind the seam
-4. Dependency strategy and adapters (see [DEEPENING.md](DEEPENING.md))
-5. Trade-offs — where leverage is high, where it's thin
+1. Interface（类型、方法、参数，以及不变量、顺序约束、错误模式）
+2. 用法示例，展示调用者如何使用它
+3. Implementation 在 seam 后隐藏了什么
+4. 依赖策略和 adapters（见 [DEEPENING.md](DEEPENING.md)）
+5. 权衡：哪里 leverage 高，哪里 leverage 薄
 
-### 3. Present and compare
+### 3. 展示和比较
 
-Present designs sequentially so the user can absorb each one, then compare them in prose. Contrast by **depth** (leverage at the interface), **locality** (where change concentrates), and **seam placement**.
+按顺序展示设计，让用户能逐个消化，然后用文字比较。按 **depth**（interface 处的 leverage）、**locality**（变更集中在哪里）、**seam placement**（seam 放在哪里）对比。
 
-After comparing, give your own recommendation: which design you think is strongest and why. If elements from different designs would combine well, propose a hybrid. Be opinionated — the user wants a strong read, not a menu.
+比较后给出你自己的建议：你认为哪个设计最强，以及原因。如果不同设计中的元素适合组合，就提出 hybrid。要有观点；用户想要明确判断，不是菜单。

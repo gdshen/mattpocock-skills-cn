@@ -1,37 +1,37 @@
 ---
 name: to-prd
-description: Turn the current conversation context into a PRD and publish it to the project issue tracker. Use when user wants to create a PRD from the current context.
+description: 把当前对话上下文转换成 PRD，并发布到 project issue tracker。用于用户想根据当前上下文创建 PRD 时。
 ---
 
-This skill takes the current conversation context and codebase understanding and produces a PRD. Do NOT interview the user — just synthesize what you already know.
+此 skill 使用当前对话上下文和代码库理解产出 PRD。不要采访用户；只综合你已经知道的内容。
 
-The issue tracker and triage label vocabulary should have been provided to you — run `/setup-matt-pocock-skills` if not.
+issue tracker 和 triage label vocabulary 应该已经提供；如果没有，运行 `/setup-matt-pocock-skills`。
 
-## Process
+## 流程
 
-1. Explore the repo to understand the current state of the codebase, if you haven't already. Use the project's domain glossary vocabulary throughout the PRD, and respect any ADRs in the area you're touching.
+1. 如果尚未探索 repo，就探索它以理解代码库当前状态。整个 PRD 都使用项目领域术语表词汇，并尊重你要触碰区域的 ADR。
 
-2. Sketch out the major modules you will need to build or modify to complete the implementation. Actively look for opportunities to extract deep modules that can be tested in isolation.
+2. 草拟完成实现需要构建或修改的主要 modules。主动寻找可提取 deep modules 的机会，让它们能独立测试。
 
-A deep module (as opposed to a shallow module) is one which encapsulates a lot of functionality in a simple, testable interface which rarely changes.
+Deep module（相对于 shallow module）指把大量功能封装在一个简单、可测试、很少变化的 interface 后面的 module。
 
-Check with the user that these modules match their expectations. Check with the user which modules they want tests written for.
+和用户确认这些 modules 是否符合预期。和用户确认他们希望为哪些 modules 写测试。
 
-3. Write the PRD using the template below, then publish it to the project issue tracker. Apply the `needs-triage` triage label so it enters the normal triage flow.
+3. 使用下面模板写 PRD，然后发布到 project issue tracker。应用 `needs-triage` triage label，让它进入正常 triage flow。
 
 <prd-template>
 
 ## Problem Statement
 
-The problem that the user is facing, from the user's perspective.
+从用户视角描述用户面临的问题。
 
 ## Solution
 
-The solution to the problem, from the user's perspective.
+从用户视角描述问题的解决方案。
 
 ## User Stories
 
-A LONG, numbered list of user stories. Each user story should be in the format of:
+一个很长的编号 user stories 列表。每个 user story 应使用以下格式：
 
 1. As an <actor>, I want a <feature>, so that <benefit>
 
@@ -39,38 +39,38 @@ A LONG, numbered list of user stories. Each user story should be in the format o
 1. As a mobile bank customer, I want to see balance on my accounts, so that I can make better informed decisions about my spending
 </user-story-example>
 
-This list of user stories should be extremely extensive and cover all aspects of the feature.
+这个 user stories 列表应该非常完整，覆盖 feature 的所有方面。
 
 ## Implementation Decisions
 
-A list of implementation decisions that were made. This can include:
+已做 implementation decisions 的列表。可包括：
 
-- The modules that will be built/modified
-- The interfaces of those modules that will be modified
-- Technical clarifications from the developer
-- Architectural decisions
+- 将要构建/修改的 modules
+- 将要修改的这些 modules 的 interfaces
+- developer 给出的技术澄清
+- 架构决策
 - Schema changes
 - API contracts
-- Specific interactions
+- 具体 interactions
 
-Do NOT include specific file paths or code snippets. They may end up being outdated very quickly.
+不要包含具体 file paths 或 code snippets。它们可能很快过期。
 
-Exception: if a prototype produced a snippet that encodes a decision more precisely than prose can (state machine, reducer, schema, type shape), inline it within the relevant decision and note briefly that it came from a prototype. Trim to the decision-rich parts — not a working demo, just the important bits.
+例外：如果 prototype 产出了比文字更精确表达决策的 snippet（state machine、reducer、schema、type shape），可以把它内联到相关 decision，并简要注明它来自 prototype。只保留决策含量高的部分；不要放完整 demo，只放重要片段。
 
 ## Testing Decisions
 
-A list of testing decisions that were made. Include:
+已做 testing decisions 的列表。包括：
 
-- A description of what makes a good test (only test external behavior, not implementation details)
-- Which modules will be tested
-- Prior art for the tests (i.e. similar types of tests in the codebase)
+- 什么是好测试的描述（只测试 external behavior，不测试 implementation details）
+- 哪些 modules 将被测试
+- 测试的 prior art（即代码库中相似类型的测试）
 
 ## Out of Scope
 
-A description of the things that are out of scope for this PRD.
+描述此 PRD 范围之外的内容。
 
 ## Further Notes
 
-Any further notes about the feature.
+关于此 feature 的任何补充说明。
 
 </prd-template>
